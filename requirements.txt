@@ -1,0 +1,4 @@
+facebook-sdk==2.0.0
+iso8601==0.1.11
+PyYAML==3.12
+requests==2.11.1

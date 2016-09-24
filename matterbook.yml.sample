@@ -1,0 +1,14 @@
+facebook:
+  access_token: SGEgaGEgaGEhIENoY2lhxYJiecWbIDpQ # Obtained from https://developers.facebook.com/tools/explorer
+  app_id: 123 # Obtained from https://developers.facebook.com/apps
+  app_secret: 123 # Obtained from https://developers.facebook.com/apps
+  page_id: somePageName # part or url right after https://www.facebook.com/, e.g. https://www.facebook.com/somePageName
+  post_filter: some keyword # (Optional) send to mattermost only posts containing given expression
+mattermost:
+  basic_auth: # (Optional)
+    username: some_user
+    password: some_password
+  icon_url: http://some.host/with/icon.png # (Optional)
+  username: bot.name # (Optional)
+  webhook_url: https://mattermost.host/hooks/abc
+
