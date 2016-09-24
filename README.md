@@ -1,14 +1,18 @@
 # Matterbook #
-Tool for sending [Facebook](facebook.com) posts to the [Mattermost](https://www.mattermost.org). Matterbook checks if the latest post from given facebook page contains specific expression and then sends it to the Mattermost
+Tool for sending [Facebook](https://facebook.com) posts to the [Mattermost](https://www.mattermost.org). Matterbook checks if the latest post from given facebook page contains specific expression and then sends it to the Mattermost
 
 ## Requirements ##
  - Python
- - [virtualenv][virtualenv]
- - [pip (package manager)][pip]
+ - [virtualenv](https://virtualenv.readthedocs.io/en/latest)
+ - [pip](https://packaging.python.org/install_requirements_linux/#installing-pip-setuptools-wheel-with-linux-package-managers)
 
 ## Setup ##
 run `./setup-venv.sh`
+
+and 
+
 `cp matterbook.cfg.default matterbook.cfg`
+
 It will create the virtual env and install all required dependencies (see `requirements.txt`)
 
 ## Configuration ##
@@ -34,7 +38,6 @@ mattermost:
 **Important!** Be aware that after each run matterbook.yml will be updated with new extended(long-lived) access token
 
 ## Run ##
-run simply `./matterbook.py` or 
-`./matterbook-start.sh` to start matterbook in background.
+simply run `./matterbook.py`. If you want to start matterbook in background use `./matterbook-start.sh`
   
 run `./matterbook-stop.sh` to stop matterbook
