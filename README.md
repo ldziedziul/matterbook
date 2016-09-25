@@ -9,11 +9,12 @@ Tool for sending [Facebook](https://facebook.com) posts to the [Mattermost](http
 ## Setup ##
 run `./setup-venv.sh`
 
-and 
-
-`cp matterbook.cfg.default matterbook.cfg`
-
 It will create the virtual env and install all required dependencies (see `requirements.txt`)
+
+Create config file:
+
+`cp matterbook.yml.default matterbook.yml`
+
 
 ## Configuration ##
 
@@ -38,6 +39,6 @@ mattermost:
 **Important!** Be aware that after each run matterbook.yml will be updated with new extended(long-lived) access token
 
 ## Run ##
-simply run `./matterbook.py`. If you want to start matterbook in background use `./matterbook-start.sh`
+Run `./matterbook-run.sh` to start matterbook in current terminal. If you want to start matterbook in the background use `./matterbook-start.sh`
   
 run `./matterbook-stop.sh` to stop matterbook
