@@ -54,7 +54,7 @@ def check_post(graph, config):
     last_post = posts[u'data'][0]
     last_post_text = last_post['message'].encode("utf8")
     post_filter = fb_config.get('post_filter').encode("utf8")
-    if post_filter == None or post_filter in last_post_text:
+    if post_filter is None or post_filter in last_post_text:
         if last_post == load_last_saved_post():
             log.debug("Old post: " + last_post_text)
         else:
@@ -71,7 +71,7 @@ def check_post(graph, config):
 
 
 def to_tuple(basic_auth):
-    return tuple(basic_auth.values()) if basic_auth != None else None
+    return tuple(basic_auth.values()) if basic_auth is not None else None
 
 
 def save_last_post(post):
