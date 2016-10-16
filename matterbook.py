@@ -13,13 +13,10 @@ import requests
 import yaml
 
 CONFIG_FILE = "matterbook.yml"
-
 DATA_DIR = 'data'
-LAST_POST_FILE_PATH = os.path.join(DATA_DIR, "last_post.txt")
 FB_API_VERSION = '2.7'
 
 log = logging.getLogger(__name__)
-
 
 def main():
     setup_logging()
@@ -28,7 +25,7 @@ def main():
     config = load_config()
     graph = get_graph_api(config)
     while True:
-        check_post(graph, config)
+        check_posts(graph, config)
         time.sleep(10)
 
 
@@ -46,38 +43,46 @@ def save_config(config):
     return config
 
 
-def check_post(graph, config):
+def check_posts(graph, config):
     mm_config = config['mattermost']
-    fb_config = config['facebook']
-    page_id = fb_config['page_id']
-    posts = graph.get_object(id=('%s/feed?fields=message,created_time,id&limit=1' % page_id))
-    last_post = posts[u'data'][0]
-    last_post_text = last_post['message'].encode("utf8")
-    post_filter = fb_config.get('post_filter').encode("utf8")
-    if post_filter is None or post_filter in last_post_text:
-        if last_post == load_last_saved_post():
-            log.debug("Old post: " + last_post_text)
+    integrations = config['integrations']
+    for integration_entry in integrations:
+        integration_id = integration_entry.keys()[0]
+        integration = integration_entry[integration_id]
+        log.info("Checking: %s" % integration_id)
+        page_id = integration['fb_page_id']
+        posts = graph.get_object(id=('%s/feed?fields=message,created_time,id&limit=1' % page_id))
+        last_post = posts[u'data'][0]
+        last_post_text = last_post['message'].encode("utf8")
+        post_filter = integration.get('fb_post_filter').encode("utf8")
+        if post_filter is None or post_filter in last_post_text:
+            if last_post == load_last_saved_post(integration_id):
+                log.debug("Old post: " + last_post_text)
+            else:
+                log.info("New post: " + last_post_text)
+                username = integration.get('mm_username')
+                icon_url = integration.get('mm_icon_url')
+                basic_auth = mm_config.get('basic_auth')
+                data = json.dumps({'username': username, 'text': last_post_text, 'icon_url': icon_url})
+                webhook_url = mm_config['webhook_url']
+                requests.post(webhook_url, data=data, auth=to_tuple(basic_auth))
+                save_last_post(integration_id, last_post)
         else:
-            log.info("New post: " + last_post_text)
-            username = mm_config.get('username')
-            icon_url = mm_config.get('icon_url')
-            basic_auth = mm_config.get('basic_auth')
-            data = json.dumps({'username': username, 'text': last_post_text, 'icon_url': icon_url})
-            webhook_url = mm_config['webhook_url']
-            requests.post(webhook_url, data=data, auth=to_tuple(basic_auth))
-            save_last_post(last_post)
-    else:
-        log.info("Ignoring: " + last_post_text)
+            log.info("Ignoring: " + last_post_text)
 
 
 def to_tuple(basic_auth):
     return tuple(basic_auth.values()) if basic_auth is not None else None
 
 
-def save_last_post(post):
+def save_last_post(integration_id, post):
     ensure_data_dir_exists()
-    with open(LAST_POST_FILE_PATH, 'w') as f:
+    with open(get_last_post_filename(integration_id), 'w') as f:
         json.dump(post, f)
+
+
+def get_last_post_filename(integration_id):
+    return os.path.join(DATA_DIR, "last_post_%s.json" % integration_id)
 
 
 def ensure_data_dir_exists():
@@ -85,10 +90,10 @@ def ensure_data_dir_exists():
         os.makedirs(DATA_DIR)
 
 
-def load_last_saved_post():
+def load_last_saved_post(integration_id):
     ensure_data_dir_exists()
-    if os.path.isfile(LAST_POST_FILE_PATH):
-        with open(LAST_POST_FILE_PATH, 'r') as f:
+    if os.path.isfile(get_last_post_filename(integration_id)):
+        with open(get_last_post_filename(integration_id), 'r') as f:
             last_post = json.load(f)
     else:
         last_post = dict()

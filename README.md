@@ -24,16 +24,24 @@ facebook:
   access_token: SGEgaGEgaGEhIENoY2lhxYJiecWbIDpQ # Obtained from https://developers.facebook.com/tools/explorer
   app_id: 123 # Obtained from https://developers.facebook.com/apps
   app_secret: 123 # Obtained from https://developers.facebook.com/apps
-  page_id: somePageName # part or url right after https://www.facebook.com/, e.g. https://www.facebook.com/somePageName
-  post_filter: some keyword # (Optional) send to mattermost only posts containing given expression
 
 mattermost:
   webhook_url: https://mattermost.host/hooks/abc
-  username: bot.name # (Optional)
-  icon_url: http://some.host/with/icon.png # (Optional)
   basic_auth: # (Optional)
     username: some_user
     password: some_password
+
+integrations:
+- some_unique_name:
+    fb_page_id: somePageName # part or url right after https://www.facebook.com/, e.g. https://www.facebook.com/somePageName
+    fb_post_filter: some keyword # (Optional) send to mattermost only posts containing given expression
+    mm_icon_url: http://some.host/with/icon.png # (Optional)
+    mm_username: bot.name # (Optional)
+- some_other_unique_name:
+    fb_page_id: someOtherPageName # part or url right after https://www.facebook.com/, e.g. https://www.facebook.com/someOtherPageName
+    fb_post_filter: some other keyword # (Optional) send to mattermost only posts containing given expression
+    mm_icon_url: http://some.other.host/with/other_icon.png # (Optional)
+    mm_username: other.bot.name # (Optional)
 ```
 
 **Important!** Be aware that after each run matterbook.yml will be updated with new extended(long-lived) access token
