@@ -18,6 +18,7 @@ FB_API_VERSION = '2.7'
 
 log = logging.getLogger(__name__)
 
+
 def main():
     setup_logging()
     log.info("Matterbook started")
@@ -25,8 +26,12 @@ def main():
     config = load_config()
     graph = get_graph_api(config)
     while True:
-        check_posts(graph, config)
+        try:
+            check_posts(graph, config)
+        except Exception as e:
+            log.error("Unexpected error: %s", e.message)
         time.sleep(10)
+
 
 
 def load_config():
