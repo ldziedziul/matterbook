@@ -59,8 +59,8 @@ def check_posts(graph, config):
         posts = graph.get_object(id=('%s/feed?fields=message,created_time,id&limit=1' % page_id))
         last_post = posts[u'data'][0]
         last_post_text = last_post.get('message', "").encode("utf8")
-        post_filter = integration.get('fb_post_filter').encode("utf8")
-        if post_filter is None or post_filter in last_post_text:
+        post_filter = integration.get('fb_post_filter')
+        if post_filter is None or post_filter.encode("utf8") in last_post_text:
             if last_post == load_last_saved_post(integration_id):
                 log.debug("Old post: " + last_post_text)
             else:
