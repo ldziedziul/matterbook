@@ -21,7 +21,6 @@ Create config file:
 Set paramaters in `matterbook.yml`:
 ```
 facebook:
-  access_token: SGEgaGEgaGEhIENoY2lhxYJiecWbIDpQ # Obtained from https://developers.facebook.com/tools/explorer
   app_id: 123 # Obtained from https://developers.facebook.com/apps
   app_secret: 123 # Obtained from https://developers.facebook.com/apps
 

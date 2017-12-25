@@ -33,18 +33,10 @@ def main():
         time.sleep(10)
 
 
-
 def load_config():
     with open(CONFIG_FILE, 'r') as f:
         config = yaml.safe_load(f)
     log.debug("Config loaded")
-    return config
-
-
-def save_config(config):
-    with open(CONFIG_FILE, 'w') as f:
-        yaml.safe_dump(config, f, default_flow_style=False)
-    log.debug("Config saved")
     return config
 
 
@@ -106,22 +98,12 @@ def load_last_saved_post(integration_id):
 
 
 def get_graph_api(config):
-    extended_token = get_extended_token(config)
-    graph = facebook.GraphAPI(access_token=extended_token, version=FB_API_VERSION)
-    return graph
-
-
-def get_extended_token(config):
     fb_config = config['facebook']
-    access_token = fb_config['access_token']
     app_id = fb_config['app_id']
     app_secret = fb_config['app_secret']
-    graph = facebook.GraphAPI(access_token=access_token, version=FB_API_VERSION)
-    extended_token_data = graph.extend_access_token(app_id, app_secret)
-    extended_token = extended_token_data['access_token']
-    fb_config['access_token'] = extended_token
-    save_config(config)
-    return extended_token
+    token = facebook.GraphAPI().get_app_access_token(app_id, app_secret)
+    graph = facebook.GraphAPI(access_token=token, version=FB_API_VERSION)
+    return graph
 
 
 def install_interrupt_handler():
