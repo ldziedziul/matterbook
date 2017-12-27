@@ -32,12 +32,12 @@ mattermost:
 
 integrations:
 - some_unique_name:
-    fb_page_id: somePageName # part or url right after https://www.facebook.com/, e.g. https://www.facebook.com/somePageName
+    fb_page_id: somePageName # part of the page url right after https://www.facebook.com/, e.g. https://www.facebook.com/somePageName
     fb_post_filter: some keyword # (Optional) send to mattermost only posts containing given expression
     mm_icon_url: http://some.host/with/icon.png # (Optional)
     mm_username: bot.name # (Optional)
 - some_other_unique_name:
-    fb_page_id: someOtherPageName # part or url right after https://www.facebook.com/, e.g. https://www.facebook.com/someOtherPageName
+    fb_page_id: someOtherPageName # part of the page url right after https://www.facebook.com/, e.g. https://www.facebook.com/someOtherPageName
     fb_post_filter: some other keyword # (Optional) send to mattermost only posts containing given expression
     mm_icon_url: http://some.other.host/with/other_icon.png # (Optional)
     mm_username: other.bot.name # (Optional)
