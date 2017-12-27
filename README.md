@@ -43,8 +43,6 @@ integrations:
     mm_username: other.bot.name # (Optional)
 ```
 
-**Important!** Be aware that after each run matterbook.yml will be updated with new extended(long-lived) access token
-
 ## Run ##
 Run `./matterbook-run.sh` to start matterbook in current terminal. If you want to start matterbook in the background use `./matterbook-start.sh`
   
