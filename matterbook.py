@@ -67,6 +67,7 @@ def check_posts(graph, config):
                 save_last_post(integration_id, last_post)
         else:
             log.debug("Ignoring: %s", last_post_text)
+        time.sleep(5)
 
 
 def to_tuple(basic_auth):
