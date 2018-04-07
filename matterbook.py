@@ -91,7 +91,11 @@ def load_last_saved_post(integration_id):
     ensure_data_dir_exists()
     if os.path.isfile(get_last_post_filename(integration_id)):
         with open(get_last_post_filename(integration_id), 'r') as f:
-            last_post = json.load(f)
+            try:
+                last_post = json.load(f)
+            except Exception as e:
+                log.error("Loading last saved post from %s failed: %s", integration_id, e.message)
+                last_post = dict()
     else:
         last_post = dict()
     return last_post
