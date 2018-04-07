@@ -89,3 +89,4 @@ venv/
 matterbook.yml
 /data/
 /nohup.out
+*.log.*

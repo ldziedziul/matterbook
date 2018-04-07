@@ -7,6 +7,7 @@ import os
 import signal
 import sys
 import time
+from logging.handlers import RotatingFileHandler
 
 import facebook
 import requests
@@ -15,6 +16,8 @@ import yaml
 CONFIG_FILE = "matterbook.yml"
 DATA_DIR = 'data'
 FB_API_VERSION = '2.7'
+LOGGING_FORMAT = '%(asctime)s [%(levelname)5s] [%(module)s] %(message)s'
+MB = 1024 * 1024
 
 log = logging.getLogger(__name__)
 
@@ -46,17 +49,15 @@ def check_posts(graph, config):
     for integration_entry in integrations:
         integration_id = integration_entry.keys()[0]
         integration = integration_entry[integration_id]
-        log.info("Checking: %s" % integration_id)
+        log.debug("Checking: %s", integration_id)
         page_id = integration['fb_page_id']
         posts = graph.get_object(id=('%s/feed?fields=message,created_time,id&limit=1' % page_id))
         last_post = posts[u'data'][0]
         last_post_text = last_post.get('message', "").encode("utf8")
         post_filter = integration.get('fb_post_filter')
         if post_filter is None or post_filter.encode("utf8") in last_post_text:
-            if last_post == load_last_saved_post(integration_id):
-                log.debug("Old post: " + last_post_text)
-            else:
-                log.info("New post: " + last_post_text)
+            if last_post != load_last_saved_post(integration_id):
+                log.info("New post: %s", last_post_text)
                 username = integration.get('mm_username')
                 icon_url = integration.get('mm_icon_url')
                 basic_auth = mm_config.get('basic_auth')
@@ -65,7 +66,7 @@ def check_posts(graph, config):
                 requests.post(webhook_url, data=data, auth=to_tuple(basic_auth))
                 save_last_post(integration_id, last_post)
         else:
-            log.info("Ignoring: " + last_post_text)
+            log.debug("Ignoring: %s", last_post_text)
 
 
 def to_tuple(basic_auth):
@@ -121,8 +122,18 @@ def signal_handler(sig, frame):
 
 
 def setup_logging():
-    logging.basicConfig(format='%(asctime)s [%(module)s] %(message)s')
-    log.setLevel(logging.INFO)
+    log.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(LOGGING_FORMAT)
+
+    file_handler = RotatingFileHandler('matterbook.log', maxBytes=10 * MB, backupCount=5)
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    log.addHandler(file_handler)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    log.addHandler(console_handler)
 
 
 main()
