@@ -2,7 +2,7 @@
 Tool for sending [Facebook](https://facebook.com) posts to the [Mattermost](https://www.mattermost.org). Matterbook checks if the latest post from given facebook page contains specific expression and then sends it to the Mattermost
 
 ## Requirements ##
- - Python
+ - Python 2
  - [virtualenv](https://virtualenv.readthedocs.io/en/latest)
  - [pip](https://packaging.python.org/install_requirements_linux/#installing-pip-setuptools-wheel-with-linux-package-managers)
 
