@@ -4,4 +4,4 @@ ndg-httpsclient==0.4.2
 pyasn1==0.1.9
 pyOpenSSL==18.0.0
 PyYAML==3.12
-requests==2.11.1
+requests==2.20.0
