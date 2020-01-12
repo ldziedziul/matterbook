@@ -19,7 +19,7 @@ Create config file:
 ## Configuration ##
 
 Set paramaters in `matterbook.yml`:
-```
+```yaml
 facebook:
   app_id: 123 # Obtained from https://developers.facebook.com/apps
   app_secret: 123 # Obtained from https://developers.facebook.com/apps
